@@ -3,7 +3,6 @@
 
 <head>
 	<title>gratitude</title>
-	<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:600&display=swap" rel="stylesheet">
 	<style>
 
 	body {
@@ -14,14 +13,14 @@
 	#list {
 		/* Remove padding that was causing improper centering. */
 		padding-inline-start: 0;
-		font-family: 'Nunito Sans', sans-serif;
-		font-size: 1.5em;
-		text-shadow: 1px 1px 1px gainsboro;
+		font-family: 'Courier', monospace;
+		font-size: 3vw;
 	}
 
 	#list li {
 		/* Remove the bullet point. */
 	    list-style-type: none;
+	    margin-bottom: 7vh;
 	}
 
 	</style>
@@ -34,18 +33,18 @@
 <script>
 
 	const xhr = new XMLHttpRequest();
-	xhr.open('GET', 'https://trello.com/1/Boards/4A16dvEI/cards?fields=name,dateLastActivity');
+	xhr.open('GET', 'https://trello.com/1/Boards/4A16dvEI/cards?fields=name');
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState !== 4 || xhr.status !== 200) {
 			return;
 		}
 		const cards = JSON.parse(xhr.responseText);
 		// Reverse cards since we want to see most recent at the top.
-		for (const card of cards.reverse()) {
+		for (const card of cards.reverse().slice(0, 30)) {
 			const node = document.createElement('LI');
 			node.appendChild(document.createTextNode(card.name));
-			const dateString = new Date(card.dateLastActivity).toLocaleDateString();
-			node.title = dateString;
+			// The creation time is stored as a hexadecimal number at the start of the card's ID.
+			node.title = new Date(parseInt(card.id.substring(0, 8), 16) * 1000).toLocaleDateString();
 			document.getElementById('list').appendChild(node);
 		}
 	};
