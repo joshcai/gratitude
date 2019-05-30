@@ -7,27 +7,78 @@
 
 	body {
 		background-color: #fbfbfb;
-		text-align: center;
-	}
-
-	#list {
-		/* Remove padding that was causing improper centering. */
-		padding-inline-start: 0;
 		font-family: 'Courier', monospace;
 		font-size: 3vw;
+		margin: 0;
 	}
 
-	#list li {
-		/* Remove the bullet point. */
-	    list-style-type: none;
+	#container {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#left-col {
+		position: fixed;
+		width: 33vw;
+		text-align: right;
+		flex: 0 0 33%;
+		background-color: #2f2f2f;
+		height: 100vh;
+	}
+
+	/* Needed since #left-col is taken out of the flow of the document. */
+	#left-col-invis {
+		flex: 0 0 33%;
+	}
+
+	#right-col {
+		flex: 0 0 67%;
+	}
+
+	#thankful-for {
+		color: #f9f9f9;
+	}
+
+	.gratitude-container {
+		display: flex;
+		flex-direction: row;
 	    margin-bottom: 7vh;
+	}
+
+	.gratitude {
+		text-align: center;
+		flex: 0 0 50%;
+	}
+
+	.date {
+		text-align: left;
+		flex: 0 0 50%;
+		color: #808080;
+	}
+
+	.invisible-buffer {
+		height: 40vh;
+	}
+
+	.invisible-end-buffer {
+		height: 48vh;
 	}
 
 	</style>
 </head>
 
 <body>
-	<ul id="list"></ul>
+	<div id="container">
+		<div id="left-col">
+			<div class="invisible-buffer"></div>
+			<div id="thankful-for">i'm thankful for:</div>
+		</div>
+		<div id="left-col-invis"></div>
+		<div id="right-col">
+			<div class="invisible-buffer"></div>
+			<!-- Gratitude containers will be added here by JavaScript. -->
+		</div>
+	</div>
 </body>
 
 <script>
@@ -41,12 +92,26 @@
 		const cards = JSON.parse(xhr.responseText);
 		// Reverse cards since we want to see most recent at the top.
 		for (const card of cards.reverse().slice(0, 30)) {
-			const node = document.createElement('LI');
-			node.appendChild(document.createTextNode(card.name));
-			// The creation time is stored as a hexadecimal number at the start of the card's ID.
-			node.title = new Date(parseInt(card.id.substring(0, 8), 16) * 1000).toLocaleDateString();
-			document.getElementById('list').appendChild(node);
+			const date = new Date(parseInt(card.id.substring(0, 8), 16) * 1000).toLocaleDateString();
+
+			const gratitudeNode = document.createElement('DIV');
+			gratitudeNode.className = 'gratitude';
+			gratitudeNode.appendChild(document.createTextNode(card.name));
+			const dateNode = document.createElement('DIV');
+			dateNode.className = 'date';
+			dateNode.appendChild(document.createTextNode(date));
+
+			const containerNode = document.createElement('DIV');
+			containerNode.className = 'gratitude-container';
+			containerNode.appendChild(gratitudeNode);
+			containerNode.appendChild(dateNode);
+
+			document.getElementById('right-col').appendChild(containerNode);
 		}
+		// Create invisible-end-buffer div that allows us to scroll to the last element.
+		const bufferNode = document.createElement('DIV');
+		bufferNode.className = 'invisible-end-buffer';
+		document.getElementById('right-col').appendChild(bufferNode);
 	};
 	xhr.send();
 
