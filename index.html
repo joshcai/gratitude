@@ -83,6 +83,25 @@
 
 <script>
 
+	function applyOpacity() {
+		// Multiply by .4 since that's the height of the invisible buffer.
+		const middleY = window.innerHeight * .4;
+		const gratitudes = document.querySelectorAll('.gratitude');
+		for(gratitude of gratitudes) {
+			const top = gratitude.getBoundingClientRect().top;
+			gratitude.style.opacity = 1.0 - (Math.abs(middleY - top) / window.innerHeight);
+		}
+		const dates = document.querySelectorAll('.date');
+		for(date of dates) {
+			const top = date.getBoundingClientRect().top;
+			date.style.opacity = 1.0 - (Math.abs(middleY - top) / window.innerHeight * 8);
+		}
+	}
+
+	window.onscroll = function() {
+		applyOpacity();
+	};
+
 	const xhr = new XMLHttpRequest();
 	xhr.open('GET', 'https://trello.com/1/Boards/4A16dvEI/cards?fields=name');
 	xhr.onreadystatechange = function() {
@@ -112,6 +131,8 @@
 		const bufferNode = document.createElement('DIV');
 		bufferNode.className = 'invisible-end-buffer';
 		document.getElementById('right-col').appendChild(bufferNode);
+
+		applyOpacity();
 	};
 	xhr.send();
 
