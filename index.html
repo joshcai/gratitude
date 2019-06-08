@@ -5,10 +5,17 @@
 	<title>gratitude</title>
 	<style>
 
+	:root {
+	  --font-size: 3vw;
+	  --buffer-height: 40vh;
+	  --page-height: 100vh;
+	  --gratitude-container-margin: 7vh;
+	}
+
 	body {
 		background-color: #fbfbfb;
 		font-family: 'Courier', monospace;
-		font-size: 3vw;
+		font-size: var(--font-size);
 		margin: 0;
 	}
 
@@ -23,7 +30,7 @@
 		text-align: right;
 		flex: 0 0 33%;
 		background-color: #2f2f2f;
-		height: 100vh;
+		height: var(--page-height);
 	}
 
 	/* Needed since #left-col is taken out of the flow of the document. */
@@ -42,7 +49,7 @@
 	.gratitude-container {
 		display: flex;
 		flex-direction: row;
-	    margin-bottom: 7vh;
+	    margin-bottom: var(--gratitude-container-margin);
 	}
 
 	.gratitude {
@@ -61,7 +68,7 @@
 	}
 
 	.invisible-end-buffer {
-		height: 48vh;
+		height: calc(var(--page-height) - var(--buffer-height) - var(--gratitude-container-margin) - var(--font-size));
 	}
 
 	</style>
@@ -71,7 +78,7 @@
 	<div id="container">
 		<div id="left-col">
 			<div class="invisible-buffer"></div>
-			<div id="thankful-for">i'm thankful for:</div>
+			<div id="thankful-for">thankful for&nbsp;</div>
 		</div>
 		<div id="left-col-invis"></div>
 		<div id="right-col">
@@ -89,7 +96,7 @@
 		const gratitudes = document.querySelectorAll('.gratitude');
 		for(gratitude of gratitudes) {
 			const top = gratitude.getBoundingClientRect().top;
-			gratitude.style.opacity = 1.0 - (Math.abs(middleY - top) / window.innerHeight);
+			gratitude.style.opacity = 1.0 - (Math.abs(middleY - top) / window.innerHeight * 1.5);
 		}
 		const dates = document.querySelectorAll('.date');
 		for(date of dates) {
