@@ -71,6 +71,32 @@
 		height: calc(var(--page-height) - var(--buffer-height) - var(--gratitude-container-margin) - var(--font-size));
 	}
 
+	@media screen and (max-width: 480px) {
+		body {
+			font-size: 10vw;
+		}
+
+		#thankful-for, #left-col, #left-col-invis {
+			display: none;
+		}
+
+		#right-col {
+			flex: 0 0 100%;
+		}
+
+		.gratitude-container {
+			display: block;
+		}
+
+		.gratitude {
+			margin-bottom: 1vh;
+		}
+
+		.date {
+			text-align: center;
+		}
+	}
+
 	</style>
 </head>
 
