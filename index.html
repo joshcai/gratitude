@@ -144,7 +144,7 @@
 		}
 		const cards = JSON.parse(xhr.responseText);
 		// Reverse cards since we want to see most recent at the top.
-		for (const card of cards.reverse().slice(0, 30)) {
+		for (const card of cards.reverse().slice(0, 90)) {
 			const date = new Date(parseInt(card.id.substring(0, 8), 16) * 1000).toLocaleDateString();
 
 			const gratitudeNode = document.createElement('DIV');
